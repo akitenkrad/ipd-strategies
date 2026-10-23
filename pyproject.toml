@@ -1,0 +1,13 @@
+[project]
+name = "ipd-strategies-workspace"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "ipd-strategies-tools",
+]
+
+[tool.uv.workspace]
+members = ["tools"]
+
+[tool.uv.sources]
+ipd-strategies-tools = { workspace = true }

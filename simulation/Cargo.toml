@@ -1,0 +1,14 @@
+[package]
+name = "ipd-strategies-simulation"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "ipd-strategies"
+path = "src/main.rs"
+
+[dependencies]
+socsim-games = { git = "https://github.com/akitenkrad/rs-social-simulation-tools", rev = "3b246d2", features = ["core", "engine"] }
+socsim-core = { git = "https://github.com/akitenkrad/rs-social-simulation-tools", rev = "3b246d2" }
+rand = "0.8"
+serde = { version = "1", features = ["derive"] }
