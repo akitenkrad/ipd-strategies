@@ -1,4 +1,4 @@
-//! TFT と自作の規則を 1 対 1 で対戦させた結果 (seed 0〜9) と，Generous TFT と Joss の対戦の結果を表に出す．
+//! TFT と自作の戦略を 1 対 1 で対戦させた結果 (seed 0〜9) と，Generous TFT と Joss の対戦の結果を表に出す．
 
 use crate::arena::{letters, play};
 use crate::state::{C, D};

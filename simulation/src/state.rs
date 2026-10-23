@@ -1,4 +1,4 @@
-//! 行動の定数と，規則の状態を入れる実験状態の型を定める．
+//! 行動の定数と，戦略の状態を入れる実験状態の型を定める．
 
 use serde::{Deserialize, Serialize};
 use socsim_core::AgentId;
@@ -10,7 +10,7 @@ use socsim_games::{
 pub const C: usize = 0; // 行動 0 = 協力
 pub const D: usize = 1; // 行動 1 = 裏切り
 
-/// エージェントごとの規則の状態．組込み規則と状態を持つ自作規則を収める．
+/// エージェントごとの戦略の状態．組込みの戦略と状態を持つ自作の戦略を収める．
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub enum Policy {
     Builtin(BuiltinPolicyState),
@@ -23,7 +23,7 @@ pub enum Policy {
     },
 }
 
-/// 組込みの規則（TFT や wsls）が自分の状態を取り出せるよう，`Builtin` に委ねる．
+/// 組込みの戦略（TFT や wsls）が自分の状態を取り出せるよう，`Builtin` に委ねる．
 macro_rules! builtin_slot {
     ($t:ty) => {
         impl Slot<$t> for Policy {

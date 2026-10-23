@@ -1,4 +1,4 @@
-//! 規則を登録した規則集を作り，2 つの戦略を ROUNDS 回対戦させる．
+//! 戦略を登録した戦略集を作り，2 つの戦略を ROUNDS 回対戦させる．
 
 use std::sync::Arc;
 
@@ -34,7 +34,7 @@ pub fn rule_book() -> RuleBook<MatrixGame, Exp> {
     }
     rules.register("alternator", Arc::new(Alternator)).unwrap();
     rules.register("gradual", Arc::new(Gradual)).unwrap();
-    // 組込み規則
+    // 組込みの戦略
     for (name, kind) in [
         ("all_c", AutomatonKind::AllC),
         ("all_d", AutomatonKind::AllD),
@@ -69,14 +69,14 @@ pub fn play(a: &str, b: &str, seed: u64) -> ([f64; 2], Vec<[usize; 2]>) {
     play_with(&rule_book(), a, b, seed)
 }
 
-/// 規則集を指定して対戦させる．テストで規則を足すときに使う．
+/// 戦略集を指定して対戦させる．テストで戦略を足すときに使う．
 pub fn play_with(
     rules: &RuleBook<MatrixGame, Exp>,
     a: &str,
     b: &str,
     seed: u64,
 ) -> ([f64; 2], Vec<[usize; 2]>) {
-    // 組込み Roth--Erev は全利得が正であるゲームを要求する．その規則を含む
+    // 組込み Roth--Erev は全利得が正であるゲームを要求する．その戦略を含む
     // 対戦だけ S を最小の正規化正数で近似し，集計には元の S=0 を使う．
     let sucker = if a == "roth_erev" || b == "roth_erev" {
         f64::MIN_POSITIVE

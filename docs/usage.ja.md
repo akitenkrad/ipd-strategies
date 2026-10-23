@@ -43,7 +43,7 @@ cargo fmt --check
 `ranking.csv` の列は `rank,strategy,mean_payoff,std_over_seeds,wins,losses,ties,stochastic` です．
 値の求め方は [戦略](strategies.ja.md#順位の決め方) に書きました．
 
-確率的な規則を含まない組は，seed によらず同じ結果になるはずです．そうならない組があると，順位表のあとに `WARNING` の行を出します．
+確率的な戦略を含まない組は，seed によらず同じ結果になるはずです．そうならない組があると，順位表のあとに `WARNING` の行を出します．
 
 ## `checks` モード
 

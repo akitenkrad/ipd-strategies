@@ -223,7 +223,7 @@ pub fn ranking_csv(ranking: &[RankingRow]) -> String {
     csv
 }
 
-/// 確率的な規則を含まない組が seed によらず同じ結果になっているか確かめ，
+/// 確率的な戦略を含まない組が seed によらず同じ結果になっているか確かめ，
 /// そうでなければ WARNING を出す．
 pub fn warn_seed_dependent_deterministic(cells: &[Vec<Vec<f64>>]) {
     for (a_idx, &a) in STRATEGIES.iter().enumerate() {

@@ -14,7 +14,7 @@ use crate::state::{Ctx, Exp, Policy, C, D};
 pub const GENEROSITY: f64 = 1.0 / 3.0; // Generous TFT が裏切りを許す確率
 pub const JOSS_DEFECT: f64 = 0.1; // Joss が協力の代わりに裏切る確率
 
-/// 規則が読む履歴: 相手の過去の手（古い順）と，自分の前回の手．
+/// 戦略が読む履歴: 相手の過去の手（古い順）と，自分の前回の手．
 pub struct Seen {
     pub opp: Vec<usize>,
     pub mine: Option<usize>,
@@ -37,7 +37,7 @@ pub fn seen(ctx: &Ctx<'_>) -> Result<Seen, RuleError> {
 /// 履歴と乱数から手を 1 つ選ぶ関数．
 pub type Choose = fn(&Seen, &mut SimRng) -> usize;
 
-/// 手の選び方を関数 1 つで持つだけの規則．
+/// 手の選び方を関数 1 つで持つだけの戦略．
 pub struct HistoryRule {
     pub name: &'static str,
     pub choose: Choose,
