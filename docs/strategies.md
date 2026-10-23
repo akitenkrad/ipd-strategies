@@ -64,9 +64,9 @@ These are implemented in `simulation/src/strategies.rs`.
   (Beaufils, Delahaye and Mathieu, 1997).
 - **Prober** and **Soft Majority** follow Mathieu and Delahaye (2017).
 
-`pavlov` (C if both players made the same move last round, D otherwise) is also implemented. It is
-the same rule as the built-in `wsls`, so it is used only for the check in the `checks` mode and is
-not in the tournament.
+Pavlov (C if both players made the same move last round, D otherwise) is not implemented here,
+because it is the same rule as the built-in `wsls`. A unit test defines it inside the tests and
+checks that it plays exactly like `wsls`.
 
 ## Ranking
 

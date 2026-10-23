@@ -10,10 +10,10 @@ simulation/
 ├── src/
 │   ├── main.rs            入口．総当たりと `checks` を振り分ける
 │   ├── state.rs           行動の定数，規則の状態 `Policy`，実験状態 `Exp`
-│   ├── strategies.rs      自作の戦略．前半は履歴だけで手が決まる 8 つ，
+│   ├── strategies.rs      自作の戦略．前半は履歴だけで手が決まる 7 つ，
 │   │                      後半は状態を持つ Alternator と Gradual
 │   ├── arena.rs           規則集と，2 つの戦略の 1 回の対戦
-│   ├── checks.rs          TFT と自作の戦略の 1 対 1 の対戦，Pavlov の検算
+│   ├── checks.rs          TFT と自作の戦略の 1 対 1 の対戦
 │   ├── tournament.rs      総当たり，集計，CSV の出力
 │   └── tests.rs           自作の戦略の単体テスト
 └── tests/
@@ -43,7 +43,7 @@ simulation/
 ### 履歴だけで決まる規則
 
 `HistoryRule` (`strategies.rs` の前半) は，名前と関数 `fn(&Seen, &mut SimRng) -> usize` を 1 つ持つだけの規則です．`Seen` は，相手の過去の手 (古い順) と自分の前回の手です．
-TF2T，Suspicious TFT，Generous TFT，Joss，Pavlov，Extort-2，Prober，Soft Majority の 8 つを，この関数として書いています．状態は `Policy::Builtin(Stateless)` です．
+TF2T，Suspicious TFT，Generous TFT，Joss，Extort-2，Prober，Soft Majority の 7 つを，この関数として書いています．状態は `Policy::Builtin(Stateless)` です．
 
 ### 状態を持つ規則
 
@@ -62,5 +62,5 @@ TF2T，Suspicious TFT，Generous TFT，Joss，Pavlov，Extort-2，Prober，Soft 
 
 ## テスト
 
-- `simulation/src/tests.rs` には，自作の戦略ごとに単体テストが 1 つずつ (計 10 個) あります．履歴だけで決まる規則は，`Seen` を組み立てて関数を直接呼びます．確率は，seed を固定して 12,000 回引いた割合を，±0.02 の幅で確かめます．Alternator と Gradual は，`play` で `all_c` や `all_d` と対戦させて確かめます．
+- `simulation/src/tests.rs` には，自作の戦略ごとの単体テストと，Pavlov のテストがあります (計 10 個) ．履歴だけで決まる規則は，`Seen` を組み立てて関数を直接呼びます．確率は，seed を固定して 12,000 回引いた割合を，±0.02 の幅で確かめます．Alternator と Gradual は，`play` で `all_c` や `all_d` と対戦させて確かめます．Pavlov はテストの中でだけ定義して規則集に足し，`play_with` で 6 つの相手・seed 0〜9 について組み込みの `wsls` と同じ結果になることを確かめます．
 - `simulation/tests/cli.rs` はバイナリを実行します．`checks` の出力と総当たりの順位表が `simulation/tests/fixtures/` のファイルとバイト単位で一致すること，総当たりが CSV を 5 つ書き出すことを確かめます．

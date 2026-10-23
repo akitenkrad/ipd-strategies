@@ -12,8 +12,8 @@ binary named `ipd-strategies`. Its dependencies pin socsim-games and socsim-core
 # Run the round-robin tournament and write CSV files to out/
 cargo run --release -q
 
-# Play TFT against six custom strategies one-on-one,
-# and check that the custom Pavlov matches the built-in wsls
+# Play TFT against five custom strategies one-on-one,
+# and Generous TFT against Joss
 cargo run --release -q -- checks
 
 # Run unit and CLI tests
@@ -52,11 +52,9 @@ program prints a `WARNING` line after the ranking.
 
 ## `checks` mode
 
-`cargo run --release -q -- checks` prints three things:
+`cargo run --release -q -- checks` prints two things:
 
-1. TFT against TF2T, Pavlov, Generous TFT, Alternator, Suspicious TFT and Joss over seeds 0 to 9:
+1. TFT against TF2T, Generous TFT, Alternator, Suspicious TFT and Joss over seeds 0 to 9:
    cumulative payoffs, C counts, and the counts of (C, C) and (D, D), followed by the first 16 moves
    of each match.
 2. Generous TFT against Joss, in the same format.
-3. A check that the custom Pavlov and the built-in `wsls` play identical moves and payoffs, printed
-   as `pavlov == wsls: 60/60 runs identical`.

@@ -10,10 +10,10 @@ simulation/
 ├── src/
 │   ├── main.rs            entry point: dispatches to the tournament or `checks`
 │   ├── state.rs           action constants, the rule state `Policy`, the experiment state `Exp`
-│   ├── strategies.rs      the custom strategies: eight decided by the history alone,
+│   ├── strategies.rs      the custom strategies: seven decided by the history alone,
 │   │                      then Alternator and Gradual, which keep their own state
 │   ├── arena.rs           the rule book and one match between two strategies
-│   ├── checks.rs          TFT one-on-one against the custom strategies, and the Pavlov check
+│   ├── checks.rs          TFT one-on-one against the custom strategies
 │   ├── tournament.rs      the round robin, the aggregation, and the CSV files
 │   └── tests.rs           unit tests of the custom strategies
 └── tests/
@@ -52,8 +52,8 @@ methods are used here:
 
 `HistoryRule` (in the first half of `strategies.rs`) holds a name and one function
 `fn(&Seen, &mut SimRng) -> usize`. `Seen` is the opponent's past moves (oldest first) and the
-agent's own previous move. Eight strategies are written as such functions: TF2T, Suspicious TFT,
-Generous TFT, Joss, Pavlov, Extort-2, Prober and Soft Majority. Their state is
+agent's own previous move. Seven strategies are written as such functions: TF2T, Suspicious TFT,
+Generous TFT, Joss, Extort-2, Prober and Soft Majority. Their state is
 `Policy::Builtin(Stateless)`.
 
 ### Stateful rules
@@ -81,10 +81,12 @@ Generous TFT, Joss, Pavlov, Extort-2, Prober and Soft Majority. Their state is
 
 ## Tests
 
-- `simulation/src/tests.rs` has one unit test per custom strategy (ten in total). History-only rules
-  are tested by calling their functions on a constructed `Seen`; probabilities are estimated over
-  12,000 draws with a fixed seed and a tolerance of ±0.02. Alternator and Gradual are tested through
-  `play` against `all_c` and `all_d`.
+- `simulation/src/tests.rs` has one unit test per custom strategy, plus one for Pavlov (ten in
+  total). History-only rules are tested by calling their functions on a constructed `Seen`;
+  probabilities are estimated over 12,000 draws with a fixed seed and a tolerance of ±0.02.
+  Alternator and Gradual are tested through `play` against `all_c` and `all_d`. Pavlov is defined
+  only in the tests, added to the rule book, and checked against the built-in `wsls` with
+  `play_with` for six opponents and seeds 0 to 9.
 - `simulation/tests/cli.rs` runs the binary. It checks that the `checks` output and the tournament
   ranking are byte-identical to the files in `simulation/tests/fixtures/`, and that the tournament
   writes the five CSV files.

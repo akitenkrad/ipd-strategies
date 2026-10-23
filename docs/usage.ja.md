@@ -11,8 +11,8 @@
 # 総当たりを実行し，out/ に CSV を書き出す
 cargo run --release -q
 
-# TFT を自作の 6 戦略と 1 対 1 で対戦させ，
-# 自作の Pavlov と組み込みの wsls が一致するかを確かめる
+# TFT を自作の 5 戦略と 1 対 1 で対戦させ，
+# Generous TFT と Joss を対戦させる
 cargo run --release -q -- checks
 
 # 単体テストと CLI のテストを実行する
@@ -47,8 +47,7 @@ cargo fmt --check
 
 ## `checks` モード
 
-`cargo run --release -q -- checks` は次の 3 つを出力します．
+`cargo run --release -q -- checks` は次の 2 つを出力します．
 
-1. TFT を TF2T，Pavlov，Generous TFT，Alternator，Suspicious TFT，Joss と seed 0〜9 で対戦させた結果．累積利得，C の回数，(C, C) と (D, D) の回数を表にし，続けて各対戦の最初の 16 ラウンドの手を出します．
+1. TFT を TF2T，Generous TFT，Alternator，Suspicious TFT，Joss と seed 0〜9 で対戦させた結果．累積利得，C の回数，(C, C) と (D, D) の回数を表にし，続けて各対戦の最初の 16 ラウンドの手を出します．
 2. Generous TFT と Joss の対戦の結果．形式は 1 と同じです．
-3. 自作の Pavlov と組み込みの `wsls` の手と利得が一致するかの検算．`pavlov == wsls: 60/60 runs identical` のように出ます．
