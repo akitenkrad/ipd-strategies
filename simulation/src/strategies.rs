@@ -54,6 +54,7 @@ impl DecisionRule<MatrixGame, Exp> for HistoryRule {
         Ok((self.choose)(&seen(ctx)?, rng))
     }
 }
+
 /// 相手が 2 回続けて裏切ったときだけ裏切る．
 pub fn tit_for_two_tats(s: &Seen, _: &mut SimRng) -> usize {
     if s.opp.ends_with(&[D, D]) {
