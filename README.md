@@ -1,53 +1,35 @@
-# Iterated Prisoner's Dilemma Strategies
+<p align="center"><img src="docs/assets/hero.svg" width="100%"></p>
 
-This repository contains companion code for the Japanese-language Zenn article
+**English** | [日本語](README.ja.md)
+
+# ipd-strategies
+
+A round-robin tournament of 18 iterated prisoner's dilemma strategies, written in Rust on top of
+[socsim-games](https://github.com/akitenkrad/rs-social-simulation-tools/tree/3b246d2/crates/socsim-games).
+Nine strategies are built into socsim-games and nine are implemented here through its
+`DecisionRule` trait. Every pair plays 200 rounds for seeds 0 to 29, and the program writes the
+payoff matrix and the ranking as CSV files. This is the companion code for the Japanese-language
+Zenn article
 [ゲーム理論×シミュレーション: 囚人のジレンマにおける戦略と Rust による実装](https://zenn.dev/akitenkrad/articles/9d99e25e96f48b).
 
-The simulation runs a round-robin tournament between 18 iterated prisoner's dilemma strategies:
-nine strategies built into `socsim-games` and nine strategies implemented for the article. Each
-match consists of 200 rounds and is repeated for seeds 0 through 29.
+## Quick start
 
-## Repository layout
-
-- `simulation/src/main.rs` implements the strategies, matches, tournament, and CLI entry point.
-- `simulation/src/tests.rs` contains unit tests for the custom strategies.
-- `simulation/tests/cli.rs` contains end-to-end tests for both CLI modes and their output files.
-- `simulation/tests/fixtures/` contains the expected legacy output and tournament ranking.
-- `tools/` is an unused template at present; it is not part of the simulation workflow.
-
-## Commands
-
-Run all commands from the workspace root.
+Requires a stable Rust toolchain. Run from the repository root:
 
 ```bash
 # Run the round-robin tournament and write CSV files to out/
 cargo run --release -q
 
-# Play TFT against six custom strategies one-on-one,
-# and check that the custom Pavlov matches the built-in wsls
-cargo run --release -q -- legacy
-
-# Run unit and CLI tests
+# Run the tests
 cargo test
-
-# Run lints
-cargo clippy --all-targets -- -D warnings
-
-# Check formatting
-cargo fmt --check
 ```
 
-## Tournament output
+## Documentation
 
-The tournament creates five CSV files in `out/`:
-
-- `matches.csv` records scores and action counts for every strategy pair and seed.
-- `matrix_mean.csv` contains the mean per-round payoff for each ordered strategy pairing.
-- `matrix_std.csv` contains the standard deviation across seeds for each ordered pairing.
-- `ranking.csv` ranks all strategies by overall mean payoff and includes seed variation and
-  win/loss/tie counts. The same content is printed to standard output.
-- `first_moves.csv` records the first 16 actions for each strategy pair at seed 0.
+- [Usage](docs/usage.md) — commands, the `legacy` mode, and the output CSV files
+- [Strategies](docs/strategies.md) — the 18 strategies, the payoffs, and how the ranking is computed
+- [Architecture](docs/architecture.md) — the source layout, where rule state lives, and the tests
 
 ## License
 
-See the included [LICENSE](LICENSE).
+[MIT](LICENSE)
