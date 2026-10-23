@@ -8,17 +8,17 @@
 simulation/
 ├── Cargo.toml
 ├── src/
-│   ├── main.rs            entry point: dispatches to the tournament or `legacy`
+│   ├── main.rs            entry point: dispatches to the tournament or `checks`
 │   ├── state.rs           action constants, the rule state `Policy`, the experiment state `Exp`
-│   ├── history_rules.rs   the eight strategies decided by the history alone
-│   ├── stateful_rules.rs  Alternator and Gradual, which keep their own state
+│   ├── strategies.rs      the custom strategies: eight decided by the history alone,
+│   │                      then Alternator and Gradual, which keep their own state
 │   ├── arena.rs           the rule book and one match between two strategies
-│   ├── legacy.rs          TFT one-on-one against the custom strategies, and the Pavlov check
+│   ├── checks.rs          TFT one-on-one against the custom strategies, and the Pavlov check
 │   ├── tournament.rs      the round robin, the aggregation, and the CSV files
 │   └── tests.rs           unit tests of the custom strategies
 └── tests/
     ├── cli.rs             end-to-end tests of both CLI modes
-    └── fixtures/          the expected `legacy` output and `ranking.csv`
+    └── fixtures/          the expected `checks` output and `ranking.csv`
 ```
 
 `tools/` is the Python template of the parent monorepo and is not used yet.
@@ -50,7 +50,7 @@ methods are used here:
 
 ### History-only rules
 
-`HistoryRule` (`history_rules.rs`) holds a name and one function
+`HistoryRule` (in the first half of `strategies.rs`) holds a name and one function
 `fn(&Seen, &mut SimRng) -> usize`. `Seen` is the opponent's past moves (oldest first) and the
 agent's own previous move. Eight strategies are written as such functions: TF2T, Suspicious TFT,
 Generous TFT, Joss, Pavlov, Extort-2, Prober and Soft Majority. Their state is
@@ -85,6 +85,6 @@ Generous TFT, Joss, Pavlov, Extort-2, Prober and Soft Majority. Their state is
   are tested by calling their functions on a constructed `Seen`; probabilities are estimated over
   12,000 draws with a fixed seed and a tolerance of ±0.02. Alternator and Gradual are tested through
   `play` against `all_c` and `all_d`.
-- `simulation/tests/cli.rs` runs the binary. It checks that the `legacy` output and the tournament
+- `simulation/tests/cli.rs` runs the binary. It checks that the `checks` output and the tournament
   ranking are byte-identical to the files in `simulation/tests/fixtures/`, and that the tournament
   writes the five CSV files.

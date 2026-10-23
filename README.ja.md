@@ -24,7 +24,7 @@ cargo test
 
 ## ドキュメント
 
-- [使い方](docs/usage.ja.md) — コマンド，`legacy` モード，出力する CSV
+- [使い方](docs/usage.ja.md) — コマンド，`checks` モード，出力する CSV
 - [戦略](docs/strategies.ja.md) — 18 の戦略，利得，順位の決め方
 - [構成](docs/architecture.ja.md) — ソースの構成，規則の状態の置き場所，テスト
 

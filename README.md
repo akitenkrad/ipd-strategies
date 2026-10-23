@@ -26,7 +26,7 @@ cargo test
 
 ## Documentation
 
-- [Usage](docs/usage.md) — commands, the `legacy` mode, and the output CSV files
+- [Usage](docs/usage.md) — commands, the `checks` mode, and the output CSV files
 - [Strategies](docs/strategies.md) — the 18 strategies, the payoffs, and how the ranking is computed
 - [Architecture](docs/architecture.md) — the source layout, where rule state lives, and the tests
 

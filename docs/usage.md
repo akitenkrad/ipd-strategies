@@ -14,7 +14,7 @@ cargo run --release -q
 
 # Play TFT against six custom strategies one-on-one,
 # and check that the custom Pavlov matches the built-in wsls
-cargo run --release -q -- legacy
+cargo run --release -q -- checks
 
 # Run unit and CLI tests
 cargo test
@@ -50,9 +50,9 @@ computed is described in [Strategies](strategies.md#ranking).
 Pairs of deterministic strategies must give the same result for every seed. If one does not, the
 program prints a `WARNING` line after the ranking.
 
-## `legacy` mode
+## `checks` mode
 
-`cargo run --release -q -- legacy` prints three things:
+`cargo run --release -q -- checks` prints three things:
 
 1. TFT against TF2T, Pavlov, Generous TFT, Alternator, Suspicious TFT and Joss over seeds 0 to 9:
    cumulative payoffs, C counts, and the counts of (C, C) and (D, D), followed by the first 16 moves

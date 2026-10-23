@@ -40,7 +40,7 @@ The payoffs in the output are recomputed from the recorded moves with S = 0.
 
 ## Custom strategies (9)
 
-These are implemented in `simulation/src/history_rules.rs` and `simulation/src/stateful_rules.rs`.
+These are implemented in `simulation/src/strategies.rs`.
 
 | Name | Behavior | Random | State |
 |---|---|:-:|:-:|
@@ -65,7 +65,7 @@ These are implemented in `simulation/src/history_rules.rs` and `simulation/src/s
 - **Prober** and **Soft Majority** follow Mathieu and Delahaye (2017).
 
 `pavlov` (C if both players made the same move last round, D otherwise) is also implemented. It is
-the same rule as the built-in `wsls`, so it is used only for the check in the `legacy` mode and is
+the same rule as the built-in `wsls`, so it is used only for the check in the `checks` mode and is
 not in the tournament.
 
 ## Ranking

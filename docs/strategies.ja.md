@@ -36,7 +36,7 @@ socsim-games の Roth–Erev の実装は，利得が 0 以下の回を受け付
 
 ## 自作の戦略 (9)
 
-`simulation/src/history_rules.rs` と `simulation/src/stateful_rules.rs` に実装しています．
+`simulation/src/strategies.rs` に実装しています．
 
 | 名前 | 振る舞い | 乱数 | 状態 |
 |---|---|:-:|:-:|
@@ -55,7 +55,7 @@ socsim-games の Roth–Erev の実装は，利得が 0 以下の回を受け付
 - **Gradual**：報復の列を始める時点までに観測した相手の D をすべて n に数えます．前の列の途中に相手が出した D も数えますが，始めた列は途中で変えません．`all_d` が相手なら，C，D，C，C，D，D，D，D，C，C，… と，報復が 1 回，4 回，10 回と伸びます (Beaufils, Delahaye and Mathieu, 1997)．
 - **Prober** と **Soft Majority** は Mathieu と Delahaye (2017) に従っています．
 
-`pavlov` (前回の自分と相手の手が同じなら C，違えば D) も実装しています．組み込みの `wsls` と同じ規則なので，`legacy` モードの検算にだけ使い，総当たりには入れていません．
+`pavlov` (前回の自分と相手の手が同じなら C，違えば D) も実装しています．組み込みの `wsls` と同じ規則なので，`checks` モードの検算にだけ使い，総当たりには入れていません．
 
 ## 順位の決め方
 
