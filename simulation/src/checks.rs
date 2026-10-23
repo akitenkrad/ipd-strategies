@@ -1,4 +1,4 @@
-//! TFT と自作の規則を 1 対 1 で対戦させた結果 (seed 0〜9) を表に出し，自作の Pavlov と組み込みの wsls が同じ手を出すかを確かめる．
+//! TFT と自作の規則を 1 対 1 で対戦させた結果 (seed 0〜9) と，Generous TFT と Joss の対戦の結果を表に出す．
 
 use crate::arena::{letters, play};
 use crate::state::{C, D};
@@ -50,7 +50,6 @@ pub fn print_row(label: &str, cells: &[String]) {
 pub fn checks() {
     let opponents = [
         "tit_for_two_tats",
-        "pavlov",
         "generous_tft",
         "alternator",
         "suspicious_tft",
@@ -79,22 +78,4 @@ pub fn checks() {
     println!();
     print_row("GTFT vs", &header);
     print_row("joss", &summary("generous_tft", "joss"));
-
-    // 4. 検算: 自作の pavlov と組込みの wsls は，どの相手・どの seed でも同じ手を打つか
-    let (mut same, mut total) = (0, 0);
-    for opp in [
-        "tit_for_tat",
-        "tit_for_two_tats",
-        "suspicious_tft",
-        "generous_tft",
-        "joss",
-        "alternator",
-    ] {
-        for seed in 0..10 {
-            total += 1;
-            same += usize::from(play(opp, "pavlov", seed) == play(opp, "wsls", seed));
-        }
-    }
-    println!();
-    println!("pavlov == wsls: {same}/{total} runs identical");
 }

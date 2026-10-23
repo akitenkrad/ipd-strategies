@@ -86,14 +86,6 @@ pub fn joss(s: &Seen, rng: &mut SimRng) -> usize {
     }
 }
 
-/// Win-Stay, Lose-Shift: 前回の自分と相手の手が同じなら C，違えば D．
-pub fn pavlov(s: &Seen, _: &mut SimRng) -> usize {
-    match (s.mine, s.opp.last()) {
-        (Some(m), Some(&o)) if m != o => D,
-        _ => C,
-    }
-}
-
 /// Press--Dyson の Extort-2．前回の手の組に応じた確率で協力する．
 pub fn extort2(s: &Seen, rng: &mut SimRng) -> usize {
     let cooperate = match (s.mine, s.opp.last().copied()) {

@@ -1,8 +1,10 @@
+use std::sync::Arc;
+
 use socsim_core::SimRng;
 
-use crate::arena::{play, ROUNDS};
+use crate::arena::{play, play_with, rule_book, ROUNDS};
 use crate::state::{C, D};
-use crate::strategies::{self, Choose, Seen, GENEROSITY, JOSS_DEFECT};
+use crate::strategies::{self, Choose, HistoryRule, Seen, GENEROSITY, JOSS_DEFECT};
 
 const PROBABILITY_TRIALS: usize = 12_000;
 const PROBABILITY_TOLERANCE: f64 = 0.02;
@@ -31,6 +33,13 @@ fn assert_rate_close(actual: f64, expected: f64) {
         (actual - expected).abs() <= PROBABILITY_TOLERANCE,
         "expected rate {expected:.6} +/- {PROBABILITY_TOLERANCE:.6}, got {actual:.6}"
     );
+}
+
+fn pavlov(s: &Seen, _: &mut SimRng) -> usize {
+    match (s.mine, s.opp.last()) {
+        (Some(m), Some(&o)) if m != o => D,
+        _ => C,
+    }
 }
 
 #[test]
@@ -87,15 +96,33 @@ fn joss() {
 }
 
 #[test]
-fn pavlov() {
-    let mut rng = dummy_rng();
-    assert_eq!(strategies::pavlov(&observed(&[], None), &mut rng), C);
+fn pavlov_matches_wsls() {
+    let mut rules = rule_book();
+    rules
+        .register(
+            "pavlov",
+            Arc::new(HistoryRule {
+                name: "pavlov",
+                choose: pavlov,
+            }),
+        )
+        .unwrap();
 
-    for (mine, opponent, expected) in [(C, C, C), (C, D, D), (D, C, D), (D, D, C)] {
-        assert_eq!(
-            strategies::pavlov(&observed(&[opponent], Some(mine)), &mut rng),
-            expected
-        );
+    for opp in [
+        "tit_for_tat",
+        "tit_for_two_tats",
+        "suspicious_tft",
+        "generous_tft",
+        "joss",
+        "alternator",
+    ] {
+        for seed in 0..10 {
+            assert_eq!(
+                play_with(&rules, opp, "pavlov", seed),
+                play_with(&rules, opp, "wsls", seed),
+                "pavlov and wsls differ against {opp} at seed {seed}"
+            );
+        }
     }
 }
 

@@ -10,19 +10,18 @@ use socsim_games::{
 
 use crate::state::{Exp, C, D};
 use crate::strategies::{
-    extort2, generous_tft, joss, pavlov, prober, soft_majority, suspicious_tft, tit_for_two_tats,
+    extort2, generous_tft, joss, prober, soft_majority, suspicious_tft, tit_for_two_tats,
     Alternator, Choose, Gradual, HistoryRule,
 };
 
 pub const ROUNDS: usize = 200;
 
 pub fn rule_book() -> RuleBook<MatrixGame, Exp> {
-    let history_rules: [(&'static str, Choose); 8] = [
+    let history_rules: [(&'static str, Choose); 7] = [
         ("tit_for_two_tats", tit_for_two_tats),
         ("suspicious_tft", suspicious_tft),
         ("generous_tft", generous_tft),
         ("joss", joss),
-        ("pavlov", pavlov),
         ("extort2", extort2),
         ("prober", prober),
         ("soft_majority", soft_majority),
@@ -67,6 +66,16 @@ pub fn rule_book() -> RuleBook<MatrixGame, Exp> {
 /// エージェント 0 に `a`，1 に `b` を割り当てて ROUNDS 回対戦させ，
 /// 各自の累積利得と，各ラウンドの (0 の手, 1 の手) を返す．
 pub fn play(a: &str, b: &str, seed: u64) -> ([f64; 2], Vec<[usize; 2]>) {
+    play_with(&rule_book(), a, b, seed)
+}
+
+/// 規則集を指定して対戦させる．テストで規則を足すときに使う．
+pub fn play_with(
+    rules: &RuleBook<MatrixGame, Exp>,
+    a: &str,
+    b: &str,
+    seed: u64,
+) -> ([f64; 2], Vec<[usize; 2]>) {
     // 組込み Roth--Erev は全利得が正であるゲームを要求する．その規則を含む
     // 対戦だけ S を最小の正規化正数で近似し，集計には元の S=0 を使う．
     let sucker = if a == "roth_erev" || b == "roth_erev" {
@@ -79,7 +88,6 @@ pub fn play(a: &str, b: &str, seed: u64) -> ([f64; 2], Vec<[usize; 2]>) {
         &[vec![3.0, 5.0], vec![sucker, 1.0]],
     )
     .unwrap();
-    let rules = rule_book();
     let group = |kind: &str, count| AssignGroup {
         kind: AssignKind::Rule(kind.into()),
         count,
@@ -94,7 +102,7 @@ pub fn play(a: &str, b: &str, seed: u64) -> ([f64; 2], Vec<[usize; 2]>) {
         2,
         Exp,
         InitialActions::Same(C),
-        &rules,
+        rules,
         &Assignment::Ordered(groups),
         ROUNDS,
         ROUNDS as u64,
@@ -104,7 +112,7 @@ pub fn play(a: &str, b: &str, seed: u64) -> ([f64; 2], Vec<[usize; 2]>) {
     let mut sim = assemble(
         world,
         FixedPlayers::pairs(&[(0, 1)]),
-        rules,
+        rules.clone(),
         NormalFormOutcome,
         PlayOptions::new(),
         seed,
