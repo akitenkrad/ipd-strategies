@@ -1,4 +1,4 @@
-//! 本稿で自作する戦略．前半は履歴だけで手が決まる規則，後半は状態を持つ規則．
+//! 本稿で自作する戦略．前半は状態を持たない戦略，後半は状態を持つ戦略．
 
 use rand::Rng;
 use socsim_core::SimRng;
@@ -9,7 +9,7 @@ use socsim_games::{
 
 use crate::state::{Ctx, Exp, Policy, C, D};
 
-// ---- 履歴だけで手が決まる規則（状態を持たない） ----
+// ---- 状態を持たない戦略 ----
 
 pub const GENEROSITY: f64 = 1.0 / 3.0; // Generous TFT が裏切りを許す確率
 pub const JOSS_DEFECT: f64 = 0.1; // Joss が協力の代わりに裏切る確率
@@ -120,7 +120,7 @@ pub fn soft_majority(s: &Seen, _: &mut SimRng) -> usize {
     }
 }
 
-// ---- 状態を持つ規則 ----
+// ---- 状態を持つ戦略 ----
 
 /// C と D を交互に出す．次の手を状態に持ち，ステップの終わりに入れ替える．
 pub struct Alternator;

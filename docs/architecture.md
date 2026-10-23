@@ -10,7 +10,7 @@ simulation/
 ├── src/
 │   ├── main.rs            entry point: dispatches to the tournament or `checks`
 │   ├── state.rs           action constants, the rule state `Policy`, the experiment state `Exp`
-│   ├── strategies.rs      the custom strategies: seven decided by the history alone,
+│   ├── strategies.rs      the custom strategies: seven stateless ones,
 │   │                      then Alternator and Gradual, which keep their own state
 │   ├── arena.rs           the rule book and one match between two strategies
 │   ├── checks.rs          TFT one-on-one against the custom strategies
@@ -48,7 +48,7 @@ methods are used here:
   the repeated game.
 - **Randomness comes only from the `rng` argument**, so the same seed gives the same result.
 
-### History-only rules
+### Stateless strategies
 
 `HistoryRule` (in the first half of `strategies.rs`) holds a name and one function
 `fn(&Seen, &mut SimRng) -> usize`. `Seen` is the opponent's past moves (oldest first) and the
@@ -56,7 +56,7 @@ agent's own previous move. Seven strategies are written as such functions: TF2T,
 Generous TFT, Joss, Extort-2, Prober and Soft Majority. Their state is
 `Policy::Builtin(Stateless)`.
 
-### Stateful rules
+### Stateful strategies
 
 - **Alternator** keeps the next move in `Policy::Alternator { next }`. `decide` only reads it, and
   `learn_step` flips it, so the state advances exactly once per step even if `decide` is called
@@ -82,7 +82,7 @@ Generous TFT, Joss, Extort-2, Prober and Soft Majority. Their state is
 ## Tests
 
 - `simulation/src/tests.rs` has one unit test per custom strategy, plus one for Pavlov (ten in
-  total). History-only rules are tested by calling their functions on a constructed `Seen`;
+  total). Stateless strategies are tested by calling their functions on a constructed `Seen`;
   probabilities are estimated over 12,000 draws with a fixed seed and a tolerance of ±0.02.
   Alternator and Gradual are tested through `play` against `all_c` and `all_d`. Pavlov is defined
   only in the tests, added to the rule book, and checked against the built-in `wsls` with
