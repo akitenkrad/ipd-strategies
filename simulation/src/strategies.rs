@@ -1,12 +1,15 @@
-//! 履歴だけで手が決まる規則（状態を持たない）を，手の選び方の関数として定める．
+//! 本稿で自作する戦略．前半は履歴だけで手が決まる規則，後半は状態を持つ規則．
 
 use rand::Rng;
 use socsim_core::SimRng;
 use socsim_games::{
-    BuiltinPolicyState, DecisionRule, MatrixGame, RuleError, RuleInitContext, Stateless,
+    BuiltinPolicyState, DecisionRule, LearnContext, MatrixGame, RuleError, RuleInitContext,
+    Stateless,
 };
 
 use crate::state::{Ctx, Exp, Policy, C, D};
+
+// ---- 履歴だけで手が決まる規則（状態を持たない） ----
 
 pub const GENEROSITY: f64 = 1.0 / 3.0; // Generous TFT が裏切りを許す確率
 pub const JOSS_DEFECT: f64 = 0.1; // Joss が協力の代わりに裏切る確率
@@ -122,5 +125,85 @@ pub fn soft_majority(s: &Seen, _: &mut SimRng) -> usize {
         C
     } else {
         D
+    }
+}
+
+// ---- 状態を持つ規則 ----
+
+/// C と D を交互に出す．次の手を状態に持ち，ステップの終わりに入れ替える．
+pub struct Alternator;
+
+impl DecisionRule<MatrixGame, Exp> for Alternator {
+    fn name(&self) -> &str {
+        "alternator"
+    }
+    fn init_state(&self, _: &RuleInitContext, _: &MatrixGame) -> Result<Policy, RuleError> {
+        Ok(Policy::Alternator { next: C })
+    }
+    fn decide(&self, state: &mut Policy, _: &Ctx<'_>, _: &mut SimRng) -> Result<usize, RuleError> {
+        match state {
+            Policy::Alternator { next } => Ok(*next),
+            _ => Err(RuleError::MissingSlot("Alternator")),
+        }
+    }
+    fn learn_step(
+        &self,
+        state: &mut Policy,
+        _: &LearnContext<'_, MatrixGame, Exp>,
+    ) -> Result<(), RuleError> {
+        match state {
+            Policy::Alternator { next } => {
+                *next = if *next == C { D } else { C };
+                Ok(())
+            }
+            _ => Err(RuleError::MissingSlot("Alternator")),
+        }
+    }
+}
+
+/// 相手の累積裏切り回数だけ報復し，2 回協力して鎮静する．
+pub struct Gradual;
+
+impl DecisionRule<MatrixGame, Exp> for Gradual {
+    fn name(&self) -> &str {
+        "gradual"
+    }
+    fn init_state(&self, _: &RuleInitContext, _: &MatrixGame) -> Result<Policy, RuleError> {
+        Ok(Policy::Gradual {
+            remaining_defections: 0,
+            remaining_calming: 0,
+        })
+    }
+    fn decide(
+        &self,
+        state: &mut Policy,
+        ctx: &Ctx<'_>,
+        _: &mut SimRng,
+    ) -> Result<usize, RuleError> {
+        let Policy::Gradual {
+            remaining_defections,
+            remaining_calming,
+        } = state
+        else {
+            return Err(RuleError::MissingSlot("Gradual"));
+        };
+        if *remaining_defections > 0 {
+            *remaining_defections -= 1;
+            return Ok(D);
+        }
+        if *remaining_calming > 0 {
+            *remaining_calming -= 1;
+            return Ok(C);
+        }
+
+        let history = seen(ctx)?.opp;
+        if history.last() == Some(&D) {
+            let defections = history.iter().filter(|&&action| action == D).count();
+            *remaining_defections = defections - 1;
+            *remaining_calming = 2;
+            Ok(D)
+        } else {
+            Ok(C)
+        }
     }
 }

@@ -8,12 +8,11 @@ use socsim_games::{
     PlayOptions, RothErev, RuleBook, TitForTat, UniformRandom,
 };
 
-use crate::history_rules::{
-    extort2, generous_tft, joss, pavlov, prober, soft_majority, suspicious_tft, tit_for_two_tats,
-    Choose, HistoryRule,
-};
 use crate::state::{Exp, C, D};
-use crate::stateful_rules::{Alternator, Gradual};
+use crate::strategies::{
+    extort2, generous_tft, joss, pavlov, prober, soft_majority, suspicious_tft, tit_for_two_tats,
+    Alternator, Choose, Gradual, HistoryRule,
+};
 
 pub const ROUNDS: usize = 200;
 

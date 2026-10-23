@@ -1,8 +1,8 @@
 use socsim_core::SimRng;
 
 use crate::arena::{play, ROUNDS};
-use crate::history_rules::{self, Choose, Seen, GENEROSITY, JOSS_DEFECT};
 use crate::state::{C, D};
+use crate::strategies::{self, Choose, Seen, GENEROSITY, JOSS_DEFECT};
 
 const PROBABILITY_TRIALS: usize = 12_000;
 const PROBABILITY_TOLERANCE: f64 = 0.02;
@@ -38,11 +38,11 @@ fn tit_for_two_tats() {
     let mut rng = dummy_rng();
 
     assert_eq!(
-        history_rules::tit_for_two_tats(&observed(&[C, D], None), &mut rng),
+        strategies::tit_for_two_tats(&observed(&[C, D], None), &mut rng),
         C
     );
     assert_eq!(
-        history_rules::tit_for_two_tats(&observed(&[D, D], None), &mut rng),
+        strategies::tit_for_two_tats(&observed(&[D, D], None), &mut rng),
         D
     );
 }
@@ -52,15 +52,15 @@ fn suspicious_tft() {
     let mut rng = dummy_rng();
 
     assert_eq!(
-        history_rules::suspicious_tft(&observed(&[], None), &mut rng),
+        strategies::suspicious_tft(&observed(&[], None), &mut rng),
         D
     );
     assert_eq!(
-        history_rules::suspicious_tft(&observed(&[C], None), &mut rng),
+        strategies::suspicious_tft(&observed(&[C], None), &mut rng),
         C
     );
     assert_eq!(
-        history_rules::suspicious_tft(&observed(&[D], None), &mut rng),
+        strategies::suspicious_tft(&observed(&[D], None), &mut rng),
         D
     );
 }
@@ -70,32 +70,30 @@ fn generous_tft() {
     let after_cooperation = observed(&[C], None);
     let mut rng = SimRng::from_seed(1);
     assert!((0..PROBABILITY_TRIALS)
-        .all(|_| history_rules::generous_tft(&after_cooperation, &mut rng) == C));
+        .all(|_| strategies::generous_tft(&after_cooperation, &mut rng) == C));
 
-    let rate = cooperation_rate(history_rules::generous_tft, &observed(&[D], None), 2);
+    let rate = cooperation_rate(strategies::generous_tft, &observed(&[D], None), 2);
     assert_rate_close(rate, GENEROSITY);
 }
 
 #[test]
 fn joss() {
     let mut rng = SimRng::from_seed(3);
-    assert_eq!(history_rules::joss(&observed(&[], None), &mut rng), C);
-    assert!(
-        (0..PROBABILITY_TRIALS).all(|_| history_rules::joss(&observed(&[D], None), &mut rng) == D)
-    );
+    assert_eq!(strategies::joss(&observed(&[], None), &mut rng), C);
+    assert!((0..PROBABILITY_TRIALS).all(|_| strategies::joss(&observed(&[D], None), &mut rng) == D));
 
-    let cooperation_rate = cooperation_rate(history_rules::joss, &observed(&[C], None), 4);
+    let cooperation_rate = cooperation_rate(strategies::joss, &observed(&[C], None), 4);
     assert_rate_close(1.0 - cooperation_rate, JOSS_DEFECT);
 }
 
 #[test]
 fn pavlov() {
     let mut rng = dummy_rng();
-    assert_eq!(history_rules::pavlov(&observed(&[], None), &mut rng), C);
+    assert_eq!(strategies::pavlov(&observed(&[], None), &mut rng), C);
 
     for (mine, opponent, expected) in [(C, C, C), (C, D, D), (D, C, D), (D, D, C)] {
         assert_eq!(
-            history_rules::pavlov(&observed(&[opponent], Some(mine)), &mut rng),
+            strategies::pavlov(&observed(&[opponent], Some(mine)), &mut rng),
             expected
         );
     }
@@ -104,9 +102,9 @@ fn pavlov() {
 #[test]
 fn extort2() {
     let mut rng = dummy_rng();
-    assert_eq!(history_rules::extort2(&observed(&[], None), &mut rng), C);
+    assert_eq!(strategies::extort2(&observed(&[], None), &mut rng), C);
     assert!((0..PROBABILITY_TRIALS)
-        .all(|_| history_rules::extort2(&observed(&[D], Some(D)), &mut rng) == D));
+        .all(|_| strategies::extort2(&observed(&[D], Some(D)), &mut rng) == D));
 
     for (seed, mine, opponent, expected) in [
         (5, C, C, 8.0 / 9.0),
@@ -114,7 +112,7 @@ fn extort2() {
         (7, D, C, 1.0 / 3.0),
     ] {
         let rate = cooperation_rate(
-            history_rules::extort2,
+            strategies::extort2,
             &observed(&[opponent], Some(mine)),
             seed,
         );
@@ -125,36 +123,24 @@ fn extort2() {
 #[test]
 fn prober() {
     let mut rng = dummy_rng();
-    assert_eq!(history_rules::prober(&observed(&[], None), &mut rng), D);
-    assert_eq!(history_rules::prober(&observed(&[D], None), &mut rng), C);
-    assert_eq!(history_rules::prober(&observed(&[D, D], None), &mut rng), C);
-    assert_eq!(
-        history_rules::prober(&observed(&[D, C, C], None), &mut rng),
-        D
-    );
-    assert_eq!(
-        history_rules::prober(&observed(&[D, D, C], None), &mut rng),
-        C
-    );
-    assert_eq!(
-        history_rules::prober(&observed(&[D, C, D], None), &mut rng),
-        D
-    );
+    assert_eq!(strategies::prober(&observed(&[], None), &mut rng), D);
+    assert_eq!(strategies::prober(&observed(&[D], None), &mut rng), C);
+    assert_eq!(strategies::prober(&observed(&[D, D], None), &mut rng), C);
+    assert_eq!(strategies::prober(&observed(&[D, C, C], None), &mut rng), D);
+    assert_eq!(strategies::prober(&observed(&[D, D, C], None), &mut rng), C);
+    assert_eq!(strategies::prober(&observed(&[D, C, D], None), &mut rng), D);
 }
 
 #[test]
 fn soft_majority() {
     let mut rng = dummy_rng();
+    assert_eq!(strategies::soft_majority(&observed(&[], None), &mut rng), C);
     assert_eq!(
-        history_rules::soft_majority(&observed(&[], None), &mut rng),
+        strategies::soft_majority(&observed(&[C, D], None), &mut rng),
         C
     );
     assert_eq!(
-        history_rules::soft_majority(&observed(&[C, D], None), &mut rng),
-        C
-    );
-    assert_eq!(
-        history_rules::soft_majority(&observed(&[C, D, D], None), &mut rng),
+        strategies::soft_majority(&observed(&[C, D, D], None), &mut rng),
         D
     );
 }

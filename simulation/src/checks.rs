@@ -47,7 +47,7 @@ pub fn print_row(label: &str, cells: &[String]) {
     println!();
 }
 
-pub fn legacy() {
+pub fn checks() {
     let opponents = [
         "tit_for_two_tats",
         "pavlov",

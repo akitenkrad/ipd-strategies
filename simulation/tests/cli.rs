@@ -38,14 +38,14 @@ fn fixture(name: &str) -> Vec<u8> {
 }
 
 #[test]
-fn legacy_stdout_matches_fixture() {
+fn checks_stdout_matches_fixture() {
     let output = Command::new(BINARY)
-        .arg("legacy")
+        .arg("checks")
         .output()
-        .expect("legacy command should run");
+        .expect("checks command should run");
 
-    assert!(output.status.success(), "legacy command failed: {output:?}");
-    assert_eq!(output.stdout, fixture("legacy_stdout.txt"));
+    assert!(output.status.success(), "checks command failed: {output:?}");
+    assert_eq!(output.stdout, fixture("checks_stdout.txt"));
 }
 
 #[test]
