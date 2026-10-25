@@ -2,6 +2,8 @@
 
 # Strategies
 
+Each strategy name in the tables below links to a page that explains its origin, how it moves, and how to read its code.
+
 ## Game
 
 Each round, both players choose C (cooperate, action `0`) or D (defect, action `1`). The payoffs
@@ -20,15 +22,15 @@ These come from socsim-games and are registered under the names below.
 
 | Name | Behavior |
 |---|---|
-| `all_c` | Always C |
-| `all_d` | Always D |
-| `tit_for_tat` | C first, then copies the opponent's previous move |
-| `grim` | C until the opponent defects once, then D forever |
-| `wsls` | Win-stay, lose-shift: C if both players made the same move last round, D otherwise |
-| `fictitious_play` | Best response to the frequency of the opponent's past moves |
-| `uniform_random` | C or D with probability 1/2 each |
-| `logit` | Chooses stochastically by the expected payoff from the same frequencies, with λ = 1 |
-| `roth_erev` | Roth–Erev reinforcement learning with φ = 0.1, ε = 0.2 and an initial propensity of 10.125 per action |
+| [`all_c`](strategies/all_c.md) | Always C |
+| [`all_d`](strategies/all_d.md) | Always D |
+| [`tit_for_tat`](strategies/tit_for_tat.md) | C first, then copies the opponent's previous move |
+| [`grim`](strategies/grim.md) | C until the opponent defects once, then D forever |
+| [`wsls`](strategies/wsls.md) | Win-stay, lose-shift: C if both players made the same move last round, D otherwise |
+| [`fictitious_play`](strategies/fictitious_play.md) | Best response to the frequency of the opponent's past moves |
+| [`uniform_random`](strategies/uniform_random.md) | C or D with probability 1/2 each |
+| [`logit`](strategies/logit.md) | Chooses stochastically by the expected payoff from the same frequencies, with λ = 1 |
+| [`roth_erev`](strategies/roth_erev.md) | Roth–Erev reinforcement learning with φ = 0.1, ε = 0.2 and an initial propensity of 10.125 per action |
 
 The initial propensity 10.125 is Erev and Roth's s(1) = 9 times the mean payoff
 (5 + 3 + 1 + 0) / 4 = 2.25, divided by the two actions.
@@ -44,15 +46,15 @@ These are implemented in `simulation/src/strategies.rs`.
 
 | Name | Behavior | Random | State |
 |---|---|:-:|:-:|
-| `tit_for_two_tats` | D only when the opponent defected twice in a row | | |
-| `suspicious_tft` | D first, then copies the opponent's previous move | | |
-| `generous_tft` | Like TFT, but forgives a D with probability g = 1/3 | ✓ | |
-| `joss` | Like TFT, but plays D with probability 0.1 where it would play C | ✓ | |
-| `alternator` | Starts with C and alternates C and D | | ✓ |
-| `extort2` | C first; then C with probability 8/9, 1/2, 1/3, 0 after (C, C), (C, D), (D, C), (D, D) | ✓ | |
-| `gradual` | After an opponent's D, plays D n times and then C twice, where n is the total number of D the opponent has played | | ✓ |
-| `prober` | Opens with D, C, C; if the opponent played C in rounds 2 and 3, D forever, otherwise TFT | | |
-| `soft_majority` | C while the opponent's C count is at least its D count, D otherwise; C first | | |
+| [`tit_for_two_tats`](strategies/tit_for_two_tats.md) | D only when the opponent defected twice in a row | | |
+| [`suspicious_tft`](strategies/suspicious_tft.md) | D first, then copies the opponent's previous move | | |
+| [`generous_tft`](strategies/generous_tft.md) | Like TFT, but forgives a D with probability g = 1/3 | ✓ | |
+| [`joss`](strategies/joss.md) | Like TFT, but plays D with probability 0.1 where it would play C | ✓ | |
+| [`alternator`](strategies/alternator.md) | Starts with C and alternates C and D | | ✓ |
+| [`extort2`](strategies/extort2.md) | C first; then C with probability 8/9, 1/2, 1/3, 0 after (C, C), (C, D), (D, C), (D, D) | ✓ | |
+| [`gradual`](strategies/gradual.md) | After an opponent's D, plays D n times and then C twice, where n is the total number of D the opponent has played | | ✓ |
+| [`prober`](strategies/prober.md) | Opens with D, C, C; if the opponent played C in rounds 2 and 3, D forever, otherwise TFT | | |
+| [`soft_majority`](strategies/soft_majority.md) | C while the opponent's C count is at least its D count, D otherwise; C first | | |
 
 - **Generous TFT**: g = min{1 − (T − R)/(R − S), (R − P)/(T − P)}, which is 1/3 with these payoffs
   (Nowak and Sigmund, 1992).

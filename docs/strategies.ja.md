@@ -2,6 +2,8 @@
 
 # 戦略
 
+下の表の戦略名から，それぞれの由来・動き・コードの読み方を解説したページに移れます．
+
 ## ゲーム
 
 各ラウンドで，2 人はそれぞれ C (協力，行動 `0`) か D (裏切り，行動 `1`) を選びます．(自分の手, 相手の手) ごとの自分の利得は次のとおりです．
@@ -19,15 +21,15 @@ socsim-games の戦略を，次の名前で登録しています．
 
 | 名前 | 振る舞い |
 |---|---|
-| `all_c` | 常に C |
-| `all_d` | 常に D |
-| `tit_for_tat` | 初回は C，以降は相手の前回の手をまねる |
-| `grim` | 相手が一度でも D を出すまで C，以降はずっと D |
-| `wsls` | Win-Stay, Lose-Shift．前回の自分と相手の手が同じなら C，違えば D |
-| `fictitious_play` | 相手の過去の手の頻度に最適反応する |
-| `uniform_random` | C と D を確率 1/2 ずつで出す |
-| `logit` | 同じ頻度から計算した期待利得に応じて，確率的に手を選ぶ．λ = 1 |
-| `roth_erev` | Roth–Erev の強化学習．φ = 0.1，ε = 0.2，1 行動あたりの初期の強さ 10.125 |
+| [`all_c`](strategies/all_c.ja.md) | 常に C |
+| [`all_d`](strategies/all_d.ja.md) | 常に D |
+| [`tit_for_tat`](strategies/tit_for_tat.ja.md) | 初回は C，以降は相手の前回の手をまねる |
+| [`grim`](strategies/grim.ja.md) | 相手が一度でも D を出すまで C，以降はずっと D |
+| [`wsls`](strategies/wsls.ja.md) | Win-Stay, Lose-Shift．前回の自分と相手の手が同じなら C，違えば D |
+| [`fictitious_play`](strategies/fictitious_play.ja.md) | 相手の過去の手の頻度に最適反応する |
+| [`uniform_random`](strategies/uniform_random.ja.md) | C と D を確率 1/2 ずつで出す |
+| [`logit`](strategies/logit.ja.md) | 同じ頻度から計算した期待利得に応じて，確率的に手を選ぶ．λ = 1 |
+| [`roth_erev`](strategies/roth_erev.ja.md) | Roth–Erev の強化学習．φ = 0.1，ε = 0.2，1 行動あたりの初期の強さ 10.125 |
 
 初期の強さ 10.125 は，Erev と Roth の s(1) = 9 に利得の平均 (5 + 3 + 1 + 0) / 4 = 2.25 を掛け，行動の数 2 で割った値です．
 
@@ -40,15 +42,15 @@ socsim-games の Roth–Erev の実装は，利得が 0 以下の回を受け付
 
 | 名前 | 振る舞い | 乱数 | 状態 |
 |---|---|:-:|:-:|
-| `tit_for_two_tats` | 相手が 2 回続けて D を出したときだけ D | | |
-| `suspicious_tft` | 初回は D，以降は相手の前回の手をまねる | | |
-| `generous_tft` | TFT と同じだが，相手の D を確率 g = 1/3 で許して C を返す | ✓ | |
-| `joss` | TFT と同じだが，C を返す場面で確率 0.1 で D を出す | ✓ | |
-| `alternator` | C から始めて C と D を交互に出す | | ✓ |
-| `extort2` | 初回は C．以降は前回の手の組が (C, C)，(C, D)，(D, C)，(D, D) のとき，それぞれ確率 8/9，1/2，1/3，0 で C | ✓ | |
-| `gradual` | 相手の D を見たら，相手の D の総数を n として D を n 回，続けて C を 2 回出す | | ✓ |
-| `prober` | 最初の 3 回は D，C，C．相手が 2 回目と 3 回目に C を出していれば以降ずっと D，そうでなければ TFT | | |
-| `soft_majority` | 相手の C の回数が D の回数以上なら C，そうでなければ D．初回は C | | |
+| [`tit_for_two_tats`](strategies/tit_for_two_tats.ja.md) | 相手が 2 回続けて D を出したときだけ D | | |
+| [`suspicious_tft`](strategies/suspicious_tft.ja.md) | 初回は D，以降は相手の前回の手をまねる | | |
+| [`generous_tft`](strategies/generous_tft.ja.md) | TFT と同じだが，相手の D を確率 g = 1/3 で許して C を返す | ✓ | |
+| [`joss`](strategies/joss.ja.md) | TFT と同じだが，C を返す場面で確率 0.1 で D を出す | ✓ | |
+| [`alternator`](strategies/alternator.ja.md) | C から始めて C と D を交互に出す | | ✓ |
+| [`extort2`](strategies/extort2.ja.md) | 初回は C．以降は前回の手の組が (C, C)，(C, D)，(D, C)，(D, D) のとき，それぞれ確率 8/9，1/2，1/3，0 で C | ✓ | |
+| [`gradual`](strategies/gradual.ja.md) | 相手の D を見たら，相手の D の総数を n として D を n 回，続けて C を 2 回出す | | ✓ |
+| [`prober`](strategies/prober.ja.md) | 最初の 3 回は D，C，C．相手が 2 回目と 3 回目に C を出していれば以降ずっと D，そうでなければ TFT | | |
+| [`soft_majority`](strategies/soft_majority.ja.md) | 相手の C の回数が D の回数以上なら C，そうでなければ D．初回は C | | |
 
 - **Generous TFT**：g = min{1 − (T − R)/(R − S), (R − P)/(T − P)} で，この利得では 1/3 です (Nowak and Sigmund, 1992)．
 - **Extort-2**：Press と Dyson (2012) のゼロ行列式戦略のうち，χ = 2，φ = 1/18 のものです．長い目で見た平均利得 s_X，s_Y のあいだに s_X − P = 2 (s_Y − P) を成り立たせます．
