@@ -8,7 +8,7 @@ Tit for Tat は，1 ラウンド目に C を出し，以降は相手が前のラ
 
 Tit for Tat は Anatol Rapoport が Axelrod の第 1 回コンピュータ選手権に投稿し，優勝した戦略です (Axelrod, 1980)．第 2 回の選手権でも優勝しました (Axelrod, 1984)．Axelrod は，その成功を次の 4 つの性質で説明しています．
 
-- **Nice**：自分から先に裏切らない．
+- **Nice (非先制型)**：自分から先に裏切らない．
 - **Retaliatory (provocable，報復的)**：相手の D には次のラウンドに D で応える．
 - **Forgiving (寛容)**：相手が C に戻れば，すぐに C に戻る．
 - **Clear (明快)**：振る舞いが相手から見て分かりやすい．

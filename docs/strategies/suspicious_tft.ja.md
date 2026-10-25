@@ -10,7 +10,7 @@ Suspicious Tit for Tat (STFT) は，Tit for Tat の定番の変種です．Boyd 
 
 Axelrod (1984) の言葉で言えば，次の性質を持ちます．
 
-- **上品ではない (not nice)**：1 ラウンド目に自分から裏切ります．
+- **非先制型ではない (not nice)**：1 ラウンド目に自分から裏切ります．
 - **報復的 (retaliatory)**：相手の D には次のラウンドで D を返します．
 - **寛容 (forgiving)**：相手の C には，それまでの経緯にかかわらず次のラウンドで C を返します．
 - **明快 (clear)**：1 ラウンド目より後は Tit for Tat そのものです．
