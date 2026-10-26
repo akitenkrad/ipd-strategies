@@ -20,13 +20,16 @@ Requires a stable Rust toolchain. Run from the repository root:
 # Run the round-robin tournament and write CSV files to out/
 cargo run --release -q
 
+# Draw the figures from out/ into fig/ (requires uv)
+uv run ipd-strategies-tools plot-tournament
+
 # Run the tests
 cargo test
 ```
 
 ## Documentation
 
-- [Usage](docs/usage.md) — commands, the `checks` mode, and the output CSV files
+- [Usage](docs/usage.md) — commands, the `checks` mode, the output CSV files, and the figures
 - [Strategies](docs/strategies.md) — the 18 strategies, the payoffs, and how the ranking is computed
 - [Architecture](docs/architecture.md) — the source layout, where rule state lives, and the tests
 

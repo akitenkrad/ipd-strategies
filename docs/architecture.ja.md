@@ -21,7 +21,7 @@ simulation/
     └── fixtures/          `checks` の出力と `ranking.csv` の期待値
 ```
 
-`tools/` は親モノレポの Python テンプレートで，まだ使っていません．
+`tools/` は Python のパッケージです．`plot_tournament.py` が `out/` から記事の図を描きます ([使い方](usage.ja.md#図))．ほかのモジュールは親モノレポのテンプレートで，まだ使っていません．
 
 ## 戦略の実装
 
@@ -64,3 +64,4 @@ TF2T，Suspicious TFT，Generous TFT，Joss，Extort-2，Prober，Soft Majority 
 
 - `simulation/src/tests.rs` には，自作の戦略ごとの単体テストと，Pavlov のテストがあります (計 10 個) ．状態を持たない戦略は，`Seen` を組み立てて関数を直接呼びます．確率は，seed を固定して 12,000 回引いた割合を，±0.02 の幅で確かめます．Alternator と Gradual は，`play` で `all_c` や `all_d` と対戦させて確かめます．Pavlov はテストの中でだけ定義して戦略集に足し，`play_with` で 6 つの相手・seed 0〜9 について組み込みの `wsls` と同じ結果になることを確かめます．
 - `simulation/tests/cli.rs` はバイナリを実行します．`checks` の出力と総当たりの順位表が `simulation/tests/fixtures/` のファイルとバイト単位で一致すること，総当たりが CSV を 5 つ書き出すことを確かめます．
+- `tools/tests/test_plot_tournament.py` は `out/` を読み，CSV の形式，非先制型の組，図の色の割り当てと配置，2 回描いて同じファイルになることを確かめます (計 9 個) ．

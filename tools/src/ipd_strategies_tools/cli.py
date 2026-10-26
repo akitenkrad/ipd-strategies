@@ -4,6 +4,7 @@ Usage:
     ipd-strategies-tools visualize [...]
     ipd-strategies-tools visualize-sweep [...]
     ipd-strategies-tools show-experiment-settings [...]
+    ipd-strategies-tools plot-tournament [...]
 """
 from __future__ import annotations
 
@@ -28,6 +29,11 @@ def main(argv: list[str] | None = None) -> None:
         help="実行結果ディレクトリの設定値を表示 (config.json / sweep_config.json)",
         add_help=False,
     )
+    subparsers.add_parser(
+        "plot-tournament",
+        help="総当たり大会の CSV から図を生成 (ヒートマップ・順位・勝利回数と平均利得)",
+        add_help=False,
+    )
 
     argv = sys.argv[1:] if argv is None else argv
     if not argv or argv[0] in {"-h", "--help"}:
@@ -44,6 +50,9 @@ def main(argv: list[str] | None = None) -> None:
         run_main(rest)
     elif command == "show-experiment-settings":
         from ipd_strategies_tools.show_experiment_settings import main as run_main
+        run_main(rest)
+    elif command == "plot-tournament":
+        from ipd_strategies_tools.plot_tournament import main as run_main
         run_main(rest)
     else:
         parser.parse_args(argv)  # 不正なサブコマンドはここでエラーになる

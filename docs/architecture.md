@@ -21,7 +21,9 @@ simulation/
     └── fixtures/          the expected `checks` output and `ranking.csv`
 ```
 
-`tools/` is the Python template of the parent monorepo and is not used yet.
+`tools/` is a Python package. `plot_tournament.py` draws the figures of the article from `out/`
+(see [Usage](usage.md#figures)); the other modules are the template of the parent monorepo and are
+not used yet.
 
 ## Implementing a strategy
 
@@ -90,3 +92,6 @@ Generous TFT, Joss, Extort-2, Prober and Soft Majority. Their state is
 - `simulation/tests/cli.rs` runs the binary. It checks that the `checks` output and the tournament
   ranking are byte-identical to the files in `simulation/tests/fixtures/`, and that the tournament
   writes the five CSV files.
+- `tools/tests/test_plot_tournament.py` reads `out/` and checks the CSV contract, the set of nice
+  strategies, the colour mapping and layout of the figures, and that drawing twice gives identical
+  files (nine tests).

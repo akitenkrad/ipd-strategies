@@ -18,13 +18,16 @@ Zenn の記事 [ゲーム理論×シミュレーション: 囚人のジレンマ
 # 総当たりを実行し，out/ に CSV を書き出す
 cargo run --release -q
 
+# out/ の CSV から図を描き，fig/ に書き出す (uv が要ります)
+uv run ipd-strategies-tools plot-tournament
+
 # テストを実行する
 cargo test
 ```
 
 ## ドキュメント
 
-- [使い方](docs/usage.ja.md) — コマンド，`checks` モード，出力する CSV
+- [使い方](docs/usage.ja.md) — コマンド，`checks` モード，出力する CSV，図
 - [戦略](docs/strategies.ja.md) — 18 の戦略，利得，順位の決め方
 - [構成](docs/architecture.ja.md) — ソースの構成，戦略の状態の置き場所，テスト
 

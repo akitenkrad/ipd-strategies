@@ -45,6 +45,30 @@ cargo fmt --check
 
 確率的な戦略を含まない組は，seed によらず同じ結果になるはずです．そうならない組があると，順位表のあとに `WARNING` の行を出します．
 
+## 図
+
+`tools/` の Python パッケージが，`out/` の CSV から Zenn の記事の図を描きます．
+Python 3.11 以上と [uv](https://docs.astral.sh/uv/) が要ります．先に総当たりを実行しておきます．
+
+```bash
+# fig/ に PNG を 3 つ書き出す
+uv run ipd-strategies-tools plot-tournament
+
+# 入力と出力のディレクトリを指定する
+uv run ipd-strategies-tools plot-tournament --input-dir out --output-dir fig
+
+# 図のテストを実行する (out/ を読みます)
+uv run python -m unittest discover -s tools/tests
+```
+
+| ファイル | 中身 |
+|---|---|
+| `tournament-heatmap.png` | `matrix_mean.csv` の利得行列．非先制型を前に，先制型を後ろに並べ，それぞれの中は順位の順 |
+| `tournament-ranking.png` | 各戦略の平均利得と seed 間の標準偏差．順位の順 |
+| `tournament-wins-vs-payoff.png` | 18 戦略の勝利回数と平均利得の散布図 |
+
+どの戦略が非先制型かは `matches.csv` から求めます．記事が想定する組と違えば，エラーで止まります．
+
 ## `checks` モード
 
 `cargo run --release -q -- checks` は次の 2 つを出力します．

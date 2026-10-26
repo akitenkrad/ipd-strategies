@@ -50,6 +50,31 @@ computed is described in [Strategies](strategies.md#ranking).
 Pairs of deterministic strategies must give the same result for every seed. If one does not, the
 program prints a `WARNING` line after the ranking.
 
+## Figures
+
+The Python package in `tools/` draws the figures of the Zenn article from the CSV files in `out/`.
+It requires Python 3.11 or later and [uv](https://docs.astral.sh/uv/). Run the tournament first.
+
+```bash
+# Write three PNG files to fig/
+uv run ipd-strategies-tools plot-tournament
+
+# Choose the directories
+uv run ipd-strategies-tools plot-tournament --input-dir out --output-dir fig
+
+# Run the tests of the figures (they read out/)
+uv run python -m unittest discover -s tools/tests
+```
+
+| File | Contents |
+|---|---|
+| `tournament-heatmap.png` | The payoff matrix of `matrix_mean.csv`, with nice strategies first and non-nice strategies after, each group in rank order |
+| `tournament-ranking.png` | The mean payoff of each strategy with its standard deviation across seeds, in rank order |
+| `tournament-wins-vs-payoff.png` | Wins against mean payoff for the 18 strategies |
+
+The script derives which strategies are nice from `matches.csv` and stops with an error if the set
+differs from the one the article expects.
+
 ## `checks` mode
 
 `cargo run --release -q -- checks` prints two things:

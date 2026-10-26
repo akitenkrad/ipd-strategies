@@ -14,6 +14,7 @@ dist/
 # Simulation outputs
 results/
 out/
+fig/
 
 # Claude Code local settings and notes
 .claude/
